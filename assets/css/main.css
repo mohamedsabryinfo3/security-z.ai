@@ -362,6 +362,27 @@ html.dark .v-late { color:#c4b5fd; }
   .pl-row .pl-dur, .pl-row .pl-st { grid-column: 2; }
 }
 
+/* ---------- coverage map ---------- */
+.cov-row {
+  display: grid;
+  grid-template-columns: 44px 1fr 168px;
+  gap: .75rem; align-items: center;
+  padding: .65rem .9rem; border-radius: .9rem;
+  border: 1px solid transparent;
+  transition: all .2s ease;
+}
+.cov-row:hover {
+  background: color-mix(in srgb, var(--surface-solid) 60%, transparent);
+  border-color: var(--border);
+}
+.cov-row.st-full    { border-right: 3px solid #059669; }
+.cov-row.st-partial { border-right: 3px solid #f59e0b; }
+.cov-row.st-gap     { border-right: 3px solid #94a3b8; opacity: .88; }
+@media (max-width: 720px) {
+  .cov-row { grid-template-columns: 40px 1fr; }
+  .cov-row .badge { grid-column: 2; justify-self: start; }
+}
+
 /* ---------- progress ring ---------- */
 .ring { transform: rotate(-90deg); }
 .ring circle { fill: none; stroke-linecap: round; }

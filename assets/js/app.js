@@ -91,7 +91,7 @@ $$("#mobile-menu a").forEach(a => a.addEventListener("click", () => {
 }));
 
 /* ---------- التوجيه ---------- */
-const VIEWS = ["home", "plan", "playlists", "schedule", "method"];
+const VIEWS = ["home", "plan", "playlists", "coverage", "schedule", "method"];
 function route() {
   const h = (location.hash || "#/home").replace("#/", "").split("?")[0];
   state.view = VIEWS.includes(h) ? h : "home";
@@ -227,6 +227,21 @@ function renderPlan() {
 
   list.innerHTML = visible.map(c => {
     const done = state.progress.has(c.n);
+
+    /* شرائح فيديوهات: الأجزاء المتتابعة تُرقَّم وتُجمع مدتها — حتى يتضح أنها تُشاهد كلها بالترتيب وليست نسخاً بديلة */
+    const chips = (vids, pk, kind = "sel") => {
+      const multi = vids.length > 1;
+      const total = vids.reduce((a, v) => a + v.d, 0);
+      const hint = multi ? `
+      <div class="flex items-center gap-1.5 mt-2 text-[11px] font-black" style="color:#059669">${IC.check} ${kind === "lab" ? "معامل متتابعة" : "سلسلة متتابعة"} — شاهد ${vids.length === 2 ? "الجزأين كليهما" : `الأجزاء الـ${vids.length} كلها`} بالترتيب</div>` : "";
+      return `${hint}
+      <div class="flex items-center gap-2 flex-wrap ${multi ? "" : "mt-1.5"}">
+        ${vids.map((v, i) => `<a class="dur-chip" href="${ytUrl(v.id, pk)}" target="_blank" rel="noopener" style="text-decoration:none" title="${esc(v.t)}">${IC.play} ${multi ? `<b>${i + 1}/${vids.length}</b> · ` : ""}${fmtDur(v.d)}</a>`).join("")}
+        ${multi ? `<span class="dur-chip" style="background:rgba(5,150,105,.12); color:#059669; cursor:default" title="مجموع مدة السلسلة كاملة">الإجمالي ${fmtDur(total)}</span>` : ""}
+        <span class="text-[11px] muted font-bold">المصدر: ${SHORT[pk]}</span>
+      </div>`;
+    };
+
     const selHtml = c.sel.map(s => `
       <div class="vid-row">
         <a class="play-btn" href="${ytUrl(s.vids[0].id, s.p)}" target="_blank" rel="noopener" title="شاهد على يوتيوب">${IC.play}</a>
@@ -234,11 +249,9 @@ function renderPlan() {
           <div class="flex items-center gap-2 flex-wrap">
             <span class="badge ${s.role.includes("مكمّل") ? "b-med" : "b-imp"}">${IC.star} ${s.role}</span>
             <a href="${ytUrl(s.vids[0].id, s.p)}" target="_blank" rel="noopener" class="text-sm font-bold hover:underline leading-snug mix" dir="auto" style="color:var(--text-1)">${esc(s.vids[0].t)}</a>
+            ${s.vids.length > 1 ? `<span class="dur-chip !text-[.65rem]" style="background:rgba(5,150,105,.12); color:#059669; cursor:default">سلسلة ${s.vids.length} أجزاء</span>` : ""}
           </div>
-          <div class="flex items-center gap-2 flex-wrap mt-1.5">
-            ${s.vids.map(v => `<a class="dur-chip" href="${ytUrl(v.id, s.p)}" target="_blank" rel="noopener" style="text-decoration:none">${IC.play} ${fmtDur(v.d)}</a>`).join("")}
-            <span class="text-[11px] muted font-bold">المصدر: ${SHORT[s.p]}</span>
-          </div>
+          ${chips(s.vids, s.p)}
           <p class="text-xs muted mt-1.5 leading-relaxed">${esc(s.why)}</p>
         </div>
       </div>`).join("");
@@ -251,9 +264,9 @@ function renderPlan() {
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 flex-wrap">
               <span class="badge b-med">${IC.flask} معمل — متوسط</span>
-              ${l.vids.map(v => `<a class="dur-chip" href="${ytUrl(v.id, l.p)}" target="_blank" rel="noopener" style="text-decoration:none">${fmtDur(v.d)}</a>`).join("")}
               <span class="text-[11px] muted font-bold">${SHORT[l.p]}</span>
             </div>
+            ${chips(l.vids, l.p, "lab")}
             <p class="text-xs muted mt-1 leading-relaxed">${esc(l.why)}</p>
           </div>
         </div>`).join("")}
@@ -262,8 +275,9 @@ function renderPlan() {
     const altsHtml = c.alts.length ? `
       <details class="mt-3 rounded-xl overflow-hidden" style="border:1px dashed var(--border)">
         <summary class="flex items-center justify-between gap-2 px-4 py-2.5 text-sm font-bold" style="color:var(--text-2)">
-          <span class="flex items-center gap-2">${IC.clock} البدائل والمراجع المحفوظة (${c.alts.length})</span>${IC.chev}
+          <span class="flex items-center gap-2">${IC.clock} بدائل ومراجع احتياطية — ليست ضمن المسار (${c.alts.length})</span>${IC.chev}
         </summary>
+        <p class="px-4 pt-2.5 pb-1 text-[11px] leading-relaxed muted font-medium">هذه دروس لنفس الموضوع من مصادر أخرى — افتحها فقط إذا احتجت شرحاً مختلفاً أو مراجعة سريعة، ولا تشاهدها مع الدرس الأساسي.</p>
         <div class="px-4 pb-3 grid gap-2">
           ${c.alts.map(a => `
           <div class="flex items-start gap-2.5 text-xs">
@@ -271,7 +285,8 @@ function renderPlan() {
             <div class="flex-1">
               <div class="flex items-center gap-1.5 flex-wrap font-bold" style="color:var(--text-1)">
                 ${SHORT[a.p]}
-                ${a.vids.map(v => `<a class="dur-chip !text-[.65rem]" href="${ytUrl(v.id, a.p)}" target="_blank" rel="noopener" style="text-decoration:none">${fmtDur(v.d)}</a>`).join("")}
+                ${a.vids.map((v, i) => `<a class="dur-chip !text-[.65rem]" href="${ytUrl(v.id, a.p)}" target="_blank" rel="noopener" style="text-decoration:none" title="${esc(v.t)}">${a.vids.length > 1 ? `${i + 1}/${a.vids.length} · ` : ""}${fmtDur(v.d)}</a>`).join("")}
+                ${a.vids.length > 1 ? `<span class="dur-chip !text-[.65rem]" style="background:rgba(6,182,212,.1); color:#0891b2; cursor:default">الإجمالي ${fmtDur(a.vids.reduce((x, v) => x + v.d, 0))}</span>` : ""}
               </div>
               <p class="muted mt-0.5 leading-relaxed">${esc(a.why)}</p>
             </div>
@@ -482,6 +497,118 @@ function renderPlaylistPanel() {
 }
 
 /* ============================================================
+   خريطة تغطية أهداف الامتحان
+   ============================================================ */
+const COV = {
+  full: { label: "تغطية كاملة", cls: "b-imp", icon: IC.check, seg: "seg-imp" },
+  partial: { label: "تغطية جزئية", cls: "b-med", icon: IC.adjust, seg: "seg-med" },
+  gap: { label: "فجوة — يحتاج مرجعاً خارجياً", cls: "b-later", icon: IC.clock, seg: "seg-later" },
+};
+
+function renderCoverage() {
+  const cov = DATA.coverage;
+  const all = cov.domains.flatMap(d => d.objectives);
+  const cnt = { full: 0, partial: 0, gap: 0 };
+  all.forEach(o => cnt[o.st]++);
+
+  const summary = `
+    <div class="card p-5 sm:p-7">
+      <div class="grid sm:grid-cols-3 gap-4 mb-5">
+        ${["full", "partial", "gap"].map(s => `
+        <div class="rounded-2xl p-4 text-center" style="background:${s === "full" ? "rgba(5,150,105,.07)" : s === "partial" ? "rgba(245,158,11,.07)" : "rgba(100,116,139,.07)"}">
+          <div class="font-display font-black text-3xl ltr" dir="ltr" style="color:${s === "full" ? "#059669" : s === "partial" ? "#b45309" : "#64748b"}">${cnt[s]}</div>
+          <div class="text-sm font-bold mt-1">${COV[s].label.replace(" — يحتاج مرجعاً خارجياً", "")}</div>
+          <div class="text-[11px] muted mt-0.5 font-medium">من أصل ${all.length} هدفاً رسمياً</div>
+        </div>`).join("")}
+      </div>
+      <div class="seg-bar !h-4 mb-5">
+        <div class="seg-imp" style="width:${cnt.full / all.length * 100}%"></div>
+        <div class="seg-med" style="width:${cnt.partial / all.length * 100}%"></div>
+        <div class="seg-later" style="width:${cnt.gap / all.length * 100}%"></div>
+      </div>
+      <p class="text-sm leading-relaxed font-medium" style="color:var(--text-2)">
+        <b style="color:var(--text-1)">الخلاصة الصادقة:</b>
+        خطة الموقع تغطي <b style="color:#059669">${cnt.full} هدفاً بتغطية كاملة</b> عبر فصولها الـ21، و<b style="color:#b45309">${cnt.partial} أهداف بتغطية جزئية</b> (الجوهر موجود والعمق يحتاج إكمالاً)، بينما <b>${cnt.gap} أهداف</b> لا يوجد لها أي فيديو عربي في القوائم الخمس — هذه ليست فجوة في التحليل بل في المحتوى العربي المتاح، ولهذا وثقناها هنا مع حلولها بدل إخفائها.
+      </p>
+      <p class="text-[11px] muted leading-relaxed mt-3 font-medium">${esc(cov.note)}</p>
+    </div>`;
+
+  const recommendations = cov.recommend.map((rec, i) => `
+    <div class="card p-5 ${i === 0 ? "" : "mt-4"}">
+      <h3 class="font-display font-black text-lg mb-3 flex items-center gap-2">
+        ${i === 0 ? IC.star : IC.ext} ${esc(rec.title)}
+      </h3>
+      <div class="grid gap-2">
+        ${rec.items.map(it => it.ext ? `
+        <div class="vid-row !py-2.5">
+          <span class="grid place-items-center w-[34px] h-[34px] rounded-xl flex-none text-[13px] font-black" style="background:rgba(139,92,246,.1); color:#7c3aed">↗</span>
+          <p class="text-sm font-medium leading-relaxed flex-1" style="color:var(--text-2)">${esc(it.label)}</p>
+        </div>` : `
+        <div class="vid-row !py-2.5">
+          <a class="play-btn !w-[34px] !h-[34px]" href="${ytUrl(it.ids[0], it.p)}" target="_blank" rel="noopener" title="شاهد على يوتيوب">${IC.play}</a>
+          <p class="text-sm font-medium leading-relaxed flex-1" style="color:var(--text-2)">${esc(it.label)} <a class="dur-chip !text-[.65rem] !py-0.5" href="${ytUrl(it.ids[0], it.p)}" target="_blank" rel="noopener" style="text-decoration:none">مشاهدة ${IC.ext}</a></p>
+        </div>`).join("")}
+      </div>
+    </div>`).join("");
+
+  const domains = cov.domains.map(d => {
+    const dc = { full: 0, partial: 0, gap: 0 };
+    d.objectives.forEach(o => dc[o.st]++);
+    return `
+    <div class="card p-5 sm:p-6">
+      <div class="flex items-center justify-between gap-3 flex-wrap mb-4">
+        <div class="flex items-center gap-2.5">
+          <span class="dom-chip d-${d.id}">${d.id}</span>
+          <h3 class="font-display font-black text-lg">${esc(d.name)}</h3>
+        </div>
+        <div class="flex items-center gap-1.5 text-[11px] font-bold">
+          <span class="badge b-imp !text-[.68rem] !py-1">${IC.check} ${dc.full}</span>
+          <span class="badge b-med !text-[.68rem] !py-1">${IC.adjust} ${dc.partial}</span>
+          <span class="badge b-later !text-[.68rem] !py-1">${IC.clock} ${dc.gap}</span>
+          <span class="dom-chip d-${d.id} !text-[.72rem]">وزن ${d.weight}%</span>
+        </div>
+      </div>
+      <div class="grid gap-1.5">
+        ${d.objectives.map(o => `
+        <div class="cov-row st-${o.st}">
+          <span class="ltr font-black text-xs text-center flex-none" dir="ltr">${o.id}</span>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2 flex-wrap">
+              <span class="text-sm font-bold" style="color:var(--text-1)">${esc(o.t)}</span>
+              ${o.ch.length ? o.ch.map(n => {
+                const c = CHAPTER_BY_N[n];
+                return `<button class="chip !text-[.68rem] !py-0.5 !px-2 ltr" data-goto-ch="${n}" title="انتقل إلى ${esc(c.ar)}">فصل ${n}</button>`;
+              }).join("") : ""}
+            </div>
+            ${o.note ? `<p class="text-xs muted mt-1 leading-relaxed">${esc(o.note)}</p>` : ""}
+          </div>
+          <span class="badge ${COV[o.st].cls} !text-[.68rem] !py-1 justify-self-start">${COV[o.st].icon} ${COV[o.st].label}</span>
+        </div>`).join("")}
+      </div>
+    </div>`;
+  }).join("");
+
+  $("#coverage-body").innerHTML = summary + `
+    <div class="card p-5 sm:p-6 mt-4" style="background:linear-gradient(120deg, rgba(8,145,178,.07), rgba(5,150,105,.07))">
+      <h3 class="font-display font-black text-lg mb-3 flex items-center gap-2">${IC.target} كيف تسد الفجوات؟ (بأسبقية واضحة)</h3>
+      <div class="grid gap-2">${recommendations}</div>
+    </div>` + domains;
+
+  // الانتقال إلى الفصل المرتبط بهدف (مقتصر على هذا القسم)
+  $$("[data-goto-ch]", $("#coverage-body")).forEach(b => b.addEventListener("click", () => {
+    location.hash = "#/plan";
+    setTimeout(() => {
+      const el = $("#ch-" + b.dataset.gotoCh);
+      if (el) { el.scrollIntoView({ behavior: "smooth", block: "center" });
+        el.querySelector(".card").style.boxShadow = "0 0 0 3px var(--primary)";
+        setTimeout(() => el.querySelector(".card").style.boxShadow = "", 1800); }
+    }, 120);
+  }));
+
+  observeReveals();
+}
+
+/* ============================================================
    الجدول الزمني
    ============================================================ */
 function renderSchedule() {
@@ -515,7 +642,7 @@ function renderSchedule() {
       <p class="text-[11px] muted mt-1.5 leading-relaxed font-bold">${esc(l)}</p>
     </div>`).join("");
 
-  $$("[data-goto-ch]").forEach(b => b.addEventListener("click", () => {
+  $$("[data-goto-ch]", $("#schedule-list")).forEach(b => b.addEventListener("click", () => {
     location.hash = "#/plan";
     setTimeout(() => {
       const el = $("#ch-" + b.dataset.gotoCh);
@@ -567,6 +694,7 @@ function renderMethod() {
 renderPlan();
 renderPlaylistTabs();
 renderPlaylistPanel();
+renderCoverage();
 renderSchedule();
 renderMethod();
 if (!location.hash) location.hash = "#/home";

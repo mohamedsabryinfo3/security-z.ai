@@ -53,6 +53,7 @@
           <a href="#/home"      class="nav-link" data-view="home">الرئيسية</a>
           <a href="#/plan"      class="nav-link" data-view="plan">خطة الدراسة</a>
           <a href="#/playlists" class="nav-link" data-view="playlists">القوائم الخمس</a>
+          <a href="#/coverage"  class="nav-link" data-view="coverage">خريطة التغطية</a>
           <a href="#/schedule"  class="nav-link" data-view="schedule">الجدول الزمني</a>
           <a href="#/method"    class="nav-link" data-view="method">منهجية التحليل</a>
         </nav>
@@ -83,6 +84,7 @@
         <a href="#/home"      class="nav-link text-center" data-view="home">الرئيسية</a>
         <a href="#/plan"      class="nav-link text-center" data-view="plan">خطة الدراسة</a>
         <a href="#/playlists" class="nav-link text-center" data-view="playlists">القوائم الخمس</a>
+        <a href="#/coverage"  class="nav-link text-center" data-view="coverage">خريطة التغطية</a>
         <a href="#/schedule"  class="nav-link text-center" data-view="schedule">الجدول الزمني</a>
         <a href="#/method"    class="nav-link text-center" data-view="method">منهجية التحليل</a>
       </nav>
@@ -195,6 +197,13 @@
       <div class="mb-6">
         <h1 class="font-display font-black text-3xl mb-2">خطة الدراسة المثلى</h1>
         <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">21 فصلاً بترتيب الكتاب الرسمي — لكل فصل أفضل درس مختار من بين القوائم الخمس، مع سبب الاختيار، والبدائل، والنقاط الأساسية التي يغطيها.</p>
+        <div class="card p-4 sm:p-5 mt-4 grid gap-2 text-sm font-medium" style="border-right:3px solid #059669">
+          <p class="leading-relaxed"><b style="color:#059669">كيف تقرأ كل فصل؟</b></p>
+          <p class="muted leading-relaxed">▸ <b style="color:var(--text-1)">الدرس الأساسي:</b> إن ظهرت عدة مدد تحته فهي <b style="color:var(--text-1)">أجزاء متتابعة لدرس واحد تُشاهد كلها بالترتيب</b> (سيظهر لك ترقيم 1/3، 2/3...) — وليست نسخاً بديلة تختار منها.</p>
+          <p class="muted leading-relaxed">▸ <b style="color:var(--text-1)">المعامل (متوسط):</b> تطبيق عملي اختياري مكمل — إن ظهرت عدة مدد فهي معامل متتابعة أيضاً.</p>
+          <p class="muted leading-relaxed">▸ <b style="color:var(--text-1)">البدائل الاحتياطية:</b> دروس لنفس الموضوع من مصادر أخرى — لا تُشاهد مع الأساسي، فقط عند الحاجة لشرح مختلف.</p>
+          <p class="leading-relaxed">▸ <b style="color:var(--text-1)">قبل الامتحان:</b> راجع <a href="#/coverage" class="underline decoration-dotted" style="color:var(--primary)" data-view="coverage">خريطة تغطية أهداف الامتحان الـ35</a> — تعرض بصدق ما يغطيه المنهج العربي وما يحتاج مرجعاً مكملاً.</p>
+        </div>
       </div>
 
       <!-- شريط التقدم + الفلاتر -->
@@ -238,6 +247,15 @@
       </div>
       <div id="pl-tabs" class="flex flex-wrap gap-2 mb-6"></div>
       <div id="pl-panel"></div>
+    </section>
+
+    <!-- ======================= خريطة التغطية ======================= -->
+    <section id="view-coverage" class="view hidden">
+      <div class="mb-6">
+        <h1 class="font-display font-black text-3xl mb-2">خريطة تغطية أهداف الامتحان</h1>
+        <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">مطابقة صريحة بين فصول الموقع الـ21 وأهداف امتحان SY0-601 الرسمية الـ35 — أين التغطية كاملة، وأين تحتاج مرجعاً مكملاً، ولماذا.</p>
+      </div>
+      <div id="coverage-body" class="grid gap-4"></div>
     </section>
 
     <!-- ======================= الجدول الزمني ======================= -->
@@ -294,6 +312,7 @@
         <div class="grid gap-1.5 text-sm font-medium">
           <a href="#/plan" class="footer-link" data-view="plan">خطة الدراسة المثلى</a>
           <a href="#/playlists" class="footer-link" data-view="playlists">تحليل القوائم الخمس</a>
+          <a href="#/coverage" class="footer-link" data-view="coverage">خريطة تغطية أهداف الامتحان</a>
           <a href="#/schedule" class="footer-link" data-view="schedule">الجدول الزمني المقترح</a>
           <a href="#/method" class="footer-link" data-view="method">منهجية التحليل</a>
         </div>
