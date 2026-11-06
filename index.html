@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>دليلك الذكي لإتقان CompTIA Security+ | SY0-601 بالعربي</title>
+  <meta name="description" content="تحليل تفاعلي لخمس قوائم يوتيوب عربية (260 فيديو، 137 ساعة) لمنهج CompTIA Security+ SY0-601 — مع اختيار أفضل درس لكل موضوع وترتيب الأولويات: مهم، متوسط، فيما بعد، غير مهم." />
+  <meta name="theme-color" content="#0891b2" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230891b2' stroke-width='2'><path d='M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z'/><path d='m9 12 2 2 4-4'/></svg>" />
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Tajawal', 'Segoe UI', 'system-ui', 'sans-serif'],
+            display: ['Cairo', 'Tajawal', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <!-- الخطوط العربية -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="assets/css/main.css" />
+</head>
+<body class="antialiased">
+
+  <!-- ======================= الشريط العلوي ======================= -->
+  <header id="topbar">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="flex items-center justify-between gap-3 h-16">
+        <!-- الشعار -->
+        <a href="#/home" class="flex items-center gap-2.5 flex-none" data-view="home">
+          <span class="grid place-items-center w-10 h-10 rounded-xl text-white" style="background:linear-gradient(135deg,#0891b2,#059669);box-shadow:0 8px 20px -6px rgba(8,145,178,.55)">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+          <span class="leading-tight">
+            <span class="block font-display font-black text-[15px] mb-0.5">Security+ بالعربي</span>
+            <span class="block text-[11px] muted font-medium mt-0.5">دليلك الذكي لـ SY0-601</span>
+          </span>
+        </a>
+
+        <!-- روابط التنقل -->
+        <nav class="hidden lg:flex items-center gap-1" id="nav-links">
+          <a href="#/home"      class="nav-link" data-view="home">الرئيسية</a>
+          <a href="#/plan"      class="nav-link" data-view="plan">خطة الدراسة</a>
+          <a href="#/playlists" class="nav-link" data-view="playlists">القوائم الخمس</a>
+          <a href="#/schedule"  class="nav-link" data-view="schedule">الجدول الزمني</a>
+          <a href="#/method"    class="nav-link" data-view="method">منهجية التحليل</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <!-- حلقة التقدم -->
+          <a href="#/plan" class="relative hidden sm:grid place-items-center w-10 h-10" title="تقدمك في الخطة" data-view="plan">
+            <svg class="ring w-10 h-10" viewBox="0 0 40 40">
+              <circle cx="20" cy="20" r="16" stroke="var(--border)" stroke-width="3.5"></circle>
+              <circle id="ring-fg" cx="20" cy="20" r="16" stroke="url(#ringGrad)" stroke-width="3.5" stroke-dasharray="100.5" stroke-dashoffset="100.5" style="transition:stroke-dashoffset .6s ease"></circle>
+              <defs><linearGradient id="ringGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#0891b2"/><stop offset="1" stop-color="#059669"/></linearGradient></defs>
+            </svg>
+            <span id="ring-txt" class="absolute text-[10px] font-black">٠٪</span>
+          </a>
+          <!-- زر الوضع الليلي -->
+          <button id="theme-btn" class="grid place-items-center w-10 h-10 rounded-xl border transition-all hover:scale-105" style="border-color:var(--border);color:var(--text-2)" title="الوضع الليلي / النهاري">
+            <span id="theme-icon"></span>
+          </button>
+          <!-- قائمة الجوال -->
+          <button id="burger" class="lg:hidden grid place-items-center w-10 h-10 rounded-xl border" style="border-color:var(--border);color:var(--text-2)" title="القائمة">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- قائمة الجوال المنسدلة -->
+      <nav id="mobile-menu" class="lg:hidden hidden pb-4 flex-col gap-1">
+        <a href="#/home"      class="nav-link text-center" data-view="home">الرئيسية</a>
+        <a href="#/plan"      class="nav-link text-center" data-view="plan">خطة الدراسة</a>
+        <a href="#/playlists" class="nav-link text-center" data-view="playlists">القوائم الخمس</a>
+        <a href="#/schedule"  class="nav-link text-center" data-view="schedule">الجدول الزمني</a>
+        <a href="#/method"    class="nav-link text-center" data-view="method">منهجية التحليل</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-20">
+
+    <!-- ======================= الرئيسية ======================= -->
+    <section id="view-home" class="view">
+      <!-- البطل -->
+      <div class="relative overflow-hidden rounded-[2rem] px-6 sm:px-12 pt-14 pb-12 card">
+        <div class="hero-grid-bg"></div>
+        <div class="float-icon w-14 h-14 top-10 right-[8%] hidden md:grid" style="animation-delay:.2s">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div class="float-icon w-12 h-12 top-24 left-[6%] hidden md:grid" style="animation-delay:1.4s">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <div class="float-icon w-11 h-11 bottom-16 right-[16%] hidden md:grid" style="animation-delay:2.6s">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20h.01M7 20v-4M12 20v-8M17 20V8M22 4v16"/></svg>
+        </div>
+
+        <div class="relative max-w-3xl mx-auto text-center">
+          <span class="badge b-imp mb-5 !text-[.78rem] !px-3.5 !py-1.5 flex-wrap justify-center leading-relaxed">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 1.9 5.8a2 2 0 0 0 1.3 1.3L21 12l-5.8 1.9a2 2 0 0 0-1.3 1.3L12 21l-1.9-5.8a2 2 0 0 0-1.3-1.3L3 12l5.8-1.9a2 2 0 0 0 1.3-1.3z"/></svg>
+            تحليل فعلي لمحتوى 5 قوائم يوتيوب — بتاريخ 7 نوفمبر 2026
+          </span>
+          <h1 class="font-display font-black mb-5 leading-[1.35]">
+            <span class="block text-3xl sm:text-5xl lg:text-[3.2rem]">دليلك الذكي لإتقان</span>
+            <span class="block mt-2 text-[1.7rem] sm:text-5xl lg:text-[3.2rem] ltr" dir="ltr"><span class="grad-text">CompTIA Security+ <span class="whitespace-nowrap">SY0-601</span></span></span>
+          </h1>
+          <p class="text-base sm:text-lg muted leading-relaxed max-w-2xl mx-auto mb-8 font-medium">
+            حللنا <b class="text-[color:var(--text-1)]">260 فيديو</b> من خمس قوائم عربية (137 ساعة!)، قارنّا الدروس المتشابهة موضوعاً بموضوع، واخترنا لك <b class="text-[color:var(--text-1)]">أفضل شرح لكل فصل</b> — مع سبب كل اختيار واستبعاد، وترتيب أولويات واضح: مهم، متوسط، فيما بعد، غير مهم.
+          </p>
+          <div class="flex flex-wrap items-center justify-center gap-3">
+            <a href="#/plan" class="btn btn-primary" data-view="plan">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.14v13.72a1 1 0 0 0 1.5.86l11-6.86a1 1 0 0 0 0-1.72l-11-6.86a1 1 0 0 0-1.5.86z"/></svg>
+              ابدأ خطة الدراسة
+            </a>
+            <a href="#/playlists" class="btn btn-ghost" data-view="playlists">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+              استكشف القوائم الخمس
+            </a>
+          </div>
+        </div>
+
+        <!-- الإحصائيات -->
+        <div id="home-stats" class="relative grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mt-12 max-w-4xl mx-auto"></div>
+
+        <!-- الرسالة الجوهرية -->
+        <div class="relative mt-8 max-w-4xl mx-auto rounded-2xl p-5 sm:p-6 flex flex-col sm:flex-row items-center gap-4 text-center sm:text-right" style="background:linear-gradient(120deg, rgba(8,145,178,.10), rgba(5,150,105,.10)); border:1px dashed color-mix(in srgb, var(--primary) 35%, transparent)">
+          <span class="grid place-items-center w-12 h-12 rounded-2xl flex-none text-white" style="background:linear-gradient(135deg,#0891b2,#059669)">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 3-8.5 8.5M11 13H5a2 2 0 0 0-2 2v0a2 2 0 0 0 2 2h6"/><path d="m13 13 8.5 8.5M11 13h6a2 2 0 0 1 2 2v0a2 2 0 0 1-2 2h-6"/></svg>
+          </span>
+          <p class="text-sm sm:text-[.95rem] leading-relaxed font-medium muted">
+            الخلاصة: لا تحتاج 137 ساعة — <b class="text-[color:var(--text-1)]">المسار الأساسي المختار 19 ساعة فقط</b> (22 فيديو)،
+            و15 ساعة إضافية اختيارية للتطبيق والمعامل، وكل ما عدا ذلك محفوظ كمرجع عند الحاجة.
+          </p>
+        </div>
+      </div>
+
+      <!-- أوزان النطاقات -->
+      <div class="mt-10">
+        <div class="flex items-end justify-between flex-wrap gap-2 mb-4">
+          <h2 class="font-display font-black text-2xl">أوزان نطاقات الامتحان الرسمية</h2>
+          <span class="text-xs muted font-medium">المصدر: CompTIA — بنية SY0-601 المعتمدة</span>
+        </div>
+        <div id="domain-bars" class="card p-5 sm:p-7 grid gap-4"></div>
+      </div>
+
+      <!-- بطاقات القوائم -->
+      <div class="mt-10">
+        <h2 class="font-display font-black text-2xl mb-4">القوائم الخمس بعد التحليل — لكل قائمة دور</h2>
+        <p class="muted text-sm mb-5 max-w-3xl leading-relaxed">بدل التشتت بين القوائم المتشابهة، حددنا دور كل قائمة في رحلتك: مصدر أساسي، مراجعة سريعة، مرجع احتياطي، مكمّلات متخصصة، أو مقتطفات مساندة.</p>
+        <div id="home-playlists" class="grid md:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+      </div>
+
+      <!-- كيف تستخدم الموقع -->
+      <div class="mt-10">
+        <h2 class="font-display font-black text-2xl mb-4">كيف تستخدم هذا الدليل؟</h2>
+        <div class="grid md:grid-cols-3 gap-4">
+          <div class="card card-hover p-5 reveal">
+            <span class="grid place-items-center w-11 h-11 rounded-xl mb-3 text-white" style="background:linear-gradient(135deg,#0891b2,#059669)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/></svg>
+            </span>
+            <h3 class="font-display font-800 font-bold text-lg mb-1.5">1. ادرس بالخطة</h3>
+            <p class="text-sm muted leading-relaxed">افتح <a href="#/plan" class="underline decoration-dotted" style="color:var(--primary)" data-view="plan">خطة الدراسة</a> وتابع الفصول الـ21 بالترتيب — كل فصل فيه أفضل فيديو مختار وسبب الاختيار والنقاط الأساسية.</p>
+          </div>
+          <div class="card card-hover p-5 reveal">
+            <span class="grid place-items-center w-11 h-11 rounded-xl mb-3 text-white" style="background:linear-gradient(135deg,#0891b2,#059669)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            </span>
+            <h3 class="font-display font-bold text-lg mb-1.5">2. علّم ما أنجزته</h3>
+            <p class="text-sm muted leading-relaxed">اضغط زر الإنجاز في كل فصل — يُحفظ تقدمك تلقائياً في متصفحك وتراه في حلقة التقدم أعلى الصفحة.</p>
+          </div>
+          <div class="card card-hover p-5 reveal">
+            <span class="grid place-items-center w-11 h-11 rounded-xl mb-3 text-white" style="background:linear-gradient(135deg,#0891b2,#059669)">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            </span>
+            <h3 class="font-display font-bold text-lg mb-1.5">3. ارجع للمراجع</h3>
+            <p class="text-sm muted leading-relaxed">لم تستوعب مفهوماً؟ فتح <a href="#/playlists" class="underline decoration-dotted" style="color:var(--primary)" data-view="playlists">القوائم الخمس</a> وسترى البدائل المحفوظة لكل موضوع مع أولوياتها.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= خطة الدراسة ======================= -->
+    <section id="view-plan" class="view hidden">
+      <div class="mb-6">
+        <h1 class="font-display font-black text-3xl mb-2">خطة الدراسة المثلى</h1>
+        <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">21 فصلاً بترتيب الكتاب الرسمي — لكل فصل أفضل درس مختار من بين القوائم الخمس، مع سبب الاختيار، والبدائل، والنقاط الأساسية التي يغطيها.</p>
+      </div>
+
+      <!-- شريط التقدم + الفلاتر -->
+      <div class="card p-4 sm:p-5 mb-6 sticky top-[68px] z-30">
+        <div class="flex flex-wrap items-center gap-3">
+          <div class="flex items-center gap-2.5 min-w-[190px]">
+            <div class="flex-1 h-2.5 rounded-full overflow-hidden" style="background:var(--border)">
+              <div id="plan-bar" class="h-full rounded-full transition-all duration-700" style="width:0%;background:linear-gradient(90deg,#0891b2,#059669)"></div>
+            </div>
+            <span id="plan-bar-txt" class="text-xs font-black whitespace-nowrap" style="color:var(--primary)">0 / 21</span>
+          </div>
+          <div class="flex items-center gap-1.5 flex-wrap" id="plan-pri-filters">
+            <button class="chip active" data-pri="all">كل الأولويات</button>
+            <button class="chip" data-pri="imp">مهم</button>
+            <button class="chip" data-pri="med">متوسط</button>
+          </div>
+          <select id="plan-dom-filter" class="chip !py-2 appearance-none" style="color:var(--text-1)">
+            <option value="all">كل النطاقات</option>
+            <option value="D1">D1 — الهجمات (24%)</option>
+            <option value="D2">D2 — المعمارية (21%)</option>
+            <option value="D3">D3 — التنفيذ (25%)</option>
+            <option value="D4">D4 — العمليات (16%)</option>
+            <option value="D5">D5 — الحوكمة (14%)</option>
+          </select>
+          <div class="relative flex-1 min-w-[170px]">
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text-2)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input id="plan-search" type="text" placeholder="ابحث في الفصول..." class="w-full chip !py-2 pr-9 !cursor-text" style="color:var(--text-1)" />
+          </div>
+        </div>
+      </div>
+
+      <div id="plan-list" class="tl grid gap-5"></div>
+      <p id="plan-empty" class="hidden text-center muted py-16 font-medium">لا توجد نتائج مطابقة — جرّب تعديل الفلاتر أو البحث.</p>
+    </section>
+
+    <!-- ======================= القوائم الخمس ======================= -->
+    <section id="view-playlists" class="view hidden">
+      <div class="mb-6">
+        <h1 class="font-display font-black text-3xl mb-2">تحليل القوائم الخمس</h1>
+        <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">كل فيديو من الـ260 مُصنّف ومعه سببه: ما الذي اختير، وما الذي استُبعد ولماذا. القوائم محفوظة كاملة كمرجع بديل عند الحاجة لشرح ثانٍ.</p>
+      </div>
+      <div id="pl-tabs" class="flex flex-wrap gap-2 mb-6"></div>
+      <div id="pl-panel"></div>
+    </section>
+
+    <!-- ======================= الجدول الزمني ======================= -->
+    <section id="view-schedule" class="view hidden">
+      <div class="mb-6">
+        <h1 class="font-display font-black text-3xl mb-2">الجدول الزمني المقترح</h1>
+        <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">خطة من 5 أسابيع (~45 دقيقة يومياً في المتوسط) تنهي الأساسيات ثم تكثّف التطبيق والمراجعة قبل الامتحان.</p>
+      </div>
+      <div id="schedule-list" class="grid gap-4"></div>
+
+      <h2 class="font-display font-black text-2xl mt-10 mb-4">حقائق الامتحان</h2>
+      <div id="exam-facts" class="grid grid-cols-2 lg:grid-cols-5 gap-3"></div>
+
+      <div class="card p-6 mt-6 flex flex-col sm:flex-row items-start gap-4" style="background:linear-gradient(120deg, rgba(8,145,178,.08), rgba(5,150,105,.08))">
+        <span class="grid place-items-center w-11 h-11 rounded-2xl flex-none text-white" style="background:linear-gradient(135deg,#0891b2,#059669)">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.9 4.9l2.8 2.8M16.3 16.3l2.8 2.8M2 12h4M18 12h4M4.9 19.1l2.8-2.8M16.3 7.7l2.8-2.8"/></svg>
+        </span>
+        <div>
+          <h3 class="font-display font-bold text-lg mb-1.5">نصائح ذهبية ليوم الامتحان</h3>
+          <ul class="text-sm muted leading-relaxed space-y-1 font-medium">
+            <li>• لا تترك سؤالاً فارغاً أبداً — لا عقوبة على الإجابة الخاطئة.</li>
+            <li>• أسئلة الأداء PBQs تستغرق وقتاً: تصفحها أولاً، علّمها للمراجعة، وابدأ بالأسئلة الاختيارية السريعة ثم عد إليها.</li>
+            <li>• عايِر الوقت: دقيقة واحدة لكل سؤال تقريباً، ولا تتجاوز دقيقتين ونصف على سؤال واحد.</li>
+            <li>• المعامل التي صنفناها «متوسط» هي تدريب مباشر على نمط أسئلة PBQs — أنجزها قبل موعد الاختبار.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================= المنهجية ======================= -->
+    <section id="view-method" class="view hidden">
+      <div class="mb-6">
+        <h1 class="font-display font-black text-3xl mb-2">منهجية التحليل — بشفافية كاملة</h1>
+        <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">كيف وُلدت كل حكم في هذا الدليل؟ هذه خطوات العمل وحدوده، لتعرف تماماً ما الذي تقوم عليه القرارات.</p>
+      </div>
+      <div id="method-body" class="grid gap-4"></div>
+    </section>
+  </main>
+
+  <!-- ======================= التذييل ======================= -->
+  <footer class="border-t" style="border-color:var(--border)">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid gap-8 md:grid-cols-3">
+      <div>
+        <div class="flex items-center gap-2.5 mb-3">
+          <span class="grid place-items-center w-9 h-9 rounded-xl text-white" style="background:linear-gradient(135deg,#0891b2,#059669)">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+          </span>
+          <span class="font-display font-black">Security+ بالعربي</span>
+        </div>
+        <p class="text-sm muted leading-relaxed">دليل دراسي تفاعلي مبني على تحليل فعلي لخمس قوائم يوتيوب عربية لمنهج CompTIA Security+ SY0-601. تقدّمك يُحفظ محلياً في متصفحك — لا حسابات ولا تتبع.</p>
+      </div>
+      <div>
+        <h4 class="font-display font-bold mb-3">تنقل سريع</h4>
+        <div class="grid gap-1.5 text-sm font-medium">
+          <a href="#/plan" class="footer-link" data-view="plan">خطة الدراسة المثلى</a>
+          <a href="#/playlists" class="footer-link" data-view="playlists">تحليل القوائم الخمس</a>
+          <a href="#/schedule" class="footer-link" data-view="schedule">الجدول الزمني المقترح</a>
+          <a href="#/method" class="footer-link" data-view="method">منهجية التحليل</a>
+        </div>
+      </div>
+      <div>
+        <h4 class="font-display font-bold mb-3">القوائم الأصلية (المرجع البديل)</h4>
+        <div id="footer-playlists" class="grid gap-1.5 text-sm font-medium"></div>
+      </div>
+    </div>
+    <div class="border-t py-4 text-center text-xs muted font-medium" style="border-color:var(--border)">
+      التحليل بتاريخ 7 نوفمبر 2026 · المشروع مفتوح للنشر على GitHub و Vercel · صُنع بعناية لطلاب الأمن السيبراني بالعربية
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>
