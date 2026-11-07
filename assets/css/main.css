@@ -448,3 +448,10 @@ html.dark .tab-btn.active { color: #06212b; }
   #topbar, footer, .no-print { display: none !important; }
   .card { box-shadow: none; border-color: #ccc; }
 }
+
+
+/* صفوف فيديوهات سدّ الفجوات على الشاشات الضيقة */
+@media (max-width: 640px) {
+  .vid-row.gf-row { flex-wrap: wrap; row-gap: .45rem; }
+  .vid-row.gf-row .gf-src-name { display: none; }
+}

@@ -40,6 +40,7 @@ const IC = {
   film: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 4v16M17 4v16M2 9h5M2 15h5M17 9h5M17 15h5"/></svg>',
   info: '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg>',
   eye: '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>',
+  plus: '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
 };
 
 const ROLE_ICON = { trophy: IC.trophy, zap: IC.zap, library: IC.library, target: IC.target, archive: IC.archive };
@@ -507,9 +508,21 @@ const COV = {
 
 function renderCoverage() {
   const cov = DATA.coverage;
+  const gf = DATA.gapFill || null;
+  const SRC = {};
+  (gf ? gf.sources : []).forEach(x => SRC[x.id] = x);
+  const groupsByObj = {};
+  gf.groups.forEach(g => { groupsByObj[g.obj] = g; });
+
   const all = cov.domains.flatMap(d => d.objectives);
   const cnt = { full: 0, partial: 0, gap: 0 };
   all.forEach(o => cnt[o.st]++);
+
+  const gfVids = gf.groups.flatMap(g => g.vids);
+  const gfCore = gfVids.filter(v => !v.opt);
+  const coreSecs = gfCore.reduce((a, v) => a + v.d, 0);
+  const allSecs = gfVids.reduce((a, v) => a + v.d, 0);
+  const hrs = x => x >= 3600 ? (x / 3600).toFixed(1).replace(/\.0$/, "") + " ساعة" : Math.round(x / 60) + " دقيقة";
 
   const summary = `
     <div class="card p-5 sm:p-7">
@@ -517,7 +530,7 @@ function renderCoverage() {
         ${["full", "partial", "gap"].map(s => `
         <div class="rounded-2xl p-4 text-center" style="background:${s === "full" ? "rgba(5,150,105,.07)" : s === "partial" ? "rgba(245,158,11,.07)" : "rgba(100,116,139,.07)"}">
           <div class="font-display font-black text-3xl ltr" dir="ltr" style="color:${s === "full" ? "#059669" : s === "partial" ? "#b45309" : "#64748b"}">${cnt[s]}</div>
-          <div class="text-sm font-bold mt-1">${COV[s].label.replace(" — يحتاج مرجعاً خارجياً", "")}</div>
+          <div class="text-sm font-bold mt-1">${s === "full" ? "تغطية كاملة" : s === "partial" ? "تغطية جزئية" : "فجوة — سُدَّت عربياً"}</div>
           <div class="text-[11px] muted mt-0.5 font-medium">من أصل ${all.length} هدفاً رسمياً</div>
         </div>`).join("")}
       </div>
@@ -528,9 +541,75 @@ function renderCoverage() {
       </div>
       <p class="text-sm leading-relaxed font-medium" style="color:var(--text-2)">
         <b style="color:var(--text-1)">الخلاصة الصادقة:</b>
-        خطة الموقع تغطي <b style="color:#059669">${cnt.full} هدفاً بتغطية كاملة</b> عبر فصولها الـ21، و<b style="color:#b45309">${cnt.partial} أهداف بتغطية جزئية</b> (الجوهر موجود والعمق يحتاج إكمالاً)، بينما <b>${cnt.gap} أهداف</b> لا يوجد لها أي فيديو عربي في القوائم الخمس — هذه ليست فجوة في التحليل بل في المحتوى العربي المتاح، ولهذا وثقناها هنا مع حلولها بدل إخفائها.
+        خطة الموقع تغطي <b style="color:#059669">${cnt.full} هدفاً بتغطية كاملة</b> عبر فصولها الـ21، و<b style="color:#b45309">${cnt.partial} أهداف بتغطية جزئية</b> (الجوهر موجود والعمق قابل للإكمال)، بينما <b>${cnt.gap} أهداف</b> لم يوجد لها أي فيديو عربي داخل القوائم الخمس.
+        <b style="color:#7c3aed">هذه الفجوات الأربع سُدَّت كلها الآن بمحتوى عربي مختار ومعتمد من خارج القوائم (${gfVids.length} فيديو من ${gf.sources.length} مصادر — نحو ${hrs(coreSecs)} أساسية)، مع فيديوهات تعميق للأهداف الجزئية — فصار لكل هدف من الأهداف الـ35 مرجع عربي واضح.</b>
       </p>
       <p class="text-[11px] muted leading-relaxed mt-3 font-medium">${esc(cov.note)}</p>
+    </div>`;
+
+  /* ---------- قسم سدّ الفجوات ---------- */
+  const vidRow = v => {
+    const src = SRC[v.src];
+    const isDub = src && src.tag === "مدبلج رسمياً";
+    return `
+    <div class="vid-row gf-row !py-2.5">
+      <a class="play-btn !w-[34px] !h-[34px]" href="https://www.youtube.com/watch?v=${v.id}" target="_blank" rel="noopener" title="شاهد على يوتيوب">${IC.play}</a>
+      <p class="text-sm font-medium leading-relaxed flex-1" style="color:var(--text-2)">${esc(v.t)}
+        ${v.opt ? `<span class="badge b-later !text-[.6rem] !py-0.5 !px-1.5">اختياري — تعمق</span>` : ""}
+      </p>
+      <span class="dur-chip !text-[.65rem]" style="cursor:default">${fmtDur(v.d)}</span>
+      <a href="${src.url}" target="_blank" rel="noopener" class="chip !text-[.65rem] !py-0.5 !px-2 flex items-center gap-1" style="text-decoration:none; background:${isDub ? "rgba(139,92,246,.1); color:#7c3aed" : "rgba(6,182,212,.1); color:#0891b2"}" title="${esc(src.name)} — ${esc(src.desc)}">${isDub ? IC.check : IC.film} <span class="gf-src-name">${esc(src.short)}</span></a>
+    </div>`;
+  };
+
+  const groupCard = g => {
+    const core = g.vids.filter(v => !v.opt);
+    const tot = core.reduce((a, v) => a + v.d, 0);
+    return `
+    <div class="card p-5" id="gf-${g.obj}" style="scroll-margin-top:96px">
+      <div class="flex items-center justify-between gap-3 flex-wrap mb-2.5">
+        <div class="flex items-center gap-2.5 flex-wrap">
+          <span class="dom-chip ltr" dir="ltr">${g.obj}</span>
+          <h3 class="font-display font-black text-base sm:text-lg">${esc(g.t)}</h3>
+          ${g.kind === "fill"
+            ? `<span class="badge b-imp !text-[.68rem] !py-1">${IC.check} سُدَّت بمحتوى عربي</span>`
+            : `<span class="badge b-med !text-[.68rem] !py-1">${IC.adjust} تعميق مكمل</span>`}
+        </div>
+        <span class="dur-chip !text-[.68rem]" style="cursor:default">${IC.film} ${core.length} فيديو · الإجمالي ${fmtDur(tot)}</span>
+      </div>
+      <p class="text-xs muted leading-relaxed mb-3.5 font-medium">${esc(g.why)}</p>
+      <div class="grid gap-2">${g.vids.map(vidRow).join("")}</div>
+    </div>`;
+  };
+
+  const fills = gf.groups.filter(g => g.kind === "fill");
+  const deeps = gf.groups.filter(g => g.kind === "deep");
+
+  const gapCard = `
+    <div class="card p-5 sm:p-6 mt-4" style="background:linear-gradient(150deg, rgba(139,92,246,.06), rgba(6,182,212,.05))">
+      <div class="flex items-start justify-between gap-3 flex-wrap mb-3">
+        <h3 class="font-display font-black text-lg sm:text-xl flex items-center gap-2">${IC.star} سدّ الفجوات — محتوى عربي مختار ومعتمد</h3>
+        <div class="flex flex-wrap items-center gap-1.5 text-[11px] font-bold">
+          <span class="dur-chip" style="cursor:default">${IC.film} ${gfVids.length} فيديو</span>
+          <span class="dur-chip" style="cursor:default">${IC.library} ${gf.sources.length} مصادر</span>
+          <span class="dur-chip" style="cursor:default">${IC.clock} ${hrs(coreSecs)} أساسية${gfVids.length > gfCore.length ? " + اختيارية" : ""}</span>
+        </div>
+      </div>
+      <p class="text-sm leading-relaxed font-medium mb-3" style="color:var(--text-2)">${esc(gf.intro)}</p>
+      <div class="rounded-2xl px-4 py-3 flex items-start gap-2.5 mb-3.5" style="background:rgba(139,92,246,.07); border:1px dashed rgba(139,92,246,.35)">
+        <span style="color:#7c3aed; flex:none; margin-top:2px">${IC.info}</span>
+        <p class="text-xs leading-relaxed font-medium" style="color:var(--text-2)">${esc(gf.dubHint)}</p>
+      </div>
+      <div class="flex flex-wrap gap-1.5 mb-4">
+        ${gf.sources.map(x => `
+        <a href="${x.url}" target="_blank" rel="noopener" class="chip !text-[.7rem] !py-1 !px-2.5 flex items-center gap-1.5" style="text-decoration:none; background:${x.tag === "عربي أصلي" ? "rgba(6,182,212,.1); color:#0891b2" : "rgba(139,92,246,.1); color:#7c3aed"}" title="${esc(x.desc)}">
+          <b>${x.tag === "عربي أصلي" ? IC.film : IC.check}</b> ${esc(x.short)} ${IC.ext}
+        </a>`).join("")}
+      </div>
+      <h4 class="font-display font-black text-sm mb-2.5 flex items-center gap-2" style="color:#059669">${IC.check} الفجوات الأربع — سدّ كامل بمحتوى عربي</h4>
+      <div class="grid gap-3">${fills.map(groupCard).join("")}</div>
+      <h4 class="font-display font-black text-sm mt-5 mb-2.5 flex items-center gap-2" style="color:#b45309">${IC.adjust} تعميق الأهداف الجزئية — لمن يريد الدرجة الكاملة</h4>
+      <div class="grid gap-3">${deeps.map(groupCard).join("")}</div>
     </div>`;
 
   const recommendations = cov.recommend.map((rec, i) => `
@@ -569,7 +648,12 @@ function renderCoverage() {
         </div>
       </div>
       <div class="grid gap-1.5">
-        ${d.objectives.map(o => `
+        ${d.objectives.map(o => {
+          const grp = groupsByObj[o.id];
+          const badge = grp && o.st === "gap"
+            ? `<span class="badge !text-[.68rem] !py-1 justify-self-start flex items-center gap-1" style="background:rgba(139,92,246,.12); color:#7c3aed">${IC.check} فجوة — سُدَّت بمحتوى عربي خارجي</span>`
+            : `<span class="badge ${COV[o.st].cls} !text-[.68rem] !py-1 justify-self-start">${COV[o.st].icon} ${COV[o.st].label}</span>`;
+          return `
         <div class="cov-row st-${o.st}">
           <span class="ltr font-black text-xs text-center flex-none" dir="ltr">${o.id}</span>
           <div class="flex-1 min-w-0">
@@ -579,18 +663,20 @@ function renderCoverage() {
                 const c = CHAPTER_BY_N[n];
                 return `<button class="chip !text-[.68rem] !py-0.5 !px-2 ltr" data-goto-ch="${n}" title="انتقل إلى ${esc(c.ar)}">فصل ${n}</button>`;
               }).join("") : ""}
+              ${grp ? `<button class="chip !text-[.68rem] !py-0.5 !px-2 flex items-center gap-1" data-goto-gf="${o.id}" style="background:rgba(139,92,246,.12); color:#7c3aed" title="انتقل إلى ${grp.kind === "fill" ? "فيديوهات سدّ الفجوة" : "فيديوهات التعميق"} لهذا الهدف">${IC.plus} ${grp.kind === "fill" ? "سُدَّت عربياً" : "تعميق عربي"}</button>` : ""}
             </div>
             ${o.note ? `<p class="text-xs muted mt-1 leading-relaxed">${esc(o.note)}</p>` : ""}
           </div>
-          <span class="badge ${COV[o.st].cls} !text-[.68rem] !py-1 justify-self-start">${COV[o.st].icon} ${COV[o.st].label}</span>
-        </div>`).join("")}
+          ${badge}
+        </div>`;
+        }).join("")}
       </div>
     </div>`;
   }).join("");
 
-  $("#coverage-body").innerHTML = summary + `
+  $("#coverage-body").innerHTML = summary + gapCard + `
     <div class="card p-5 sm:p-6 mt-4" style="background:linear-gradient(120deg, rgba(8,145,178,.07), rgba(5,150,105,.07))">
-      <h3 class="font-display font-black text-lg mb-3 flex items-center gap-2">${IC.target} كيف تسد الفجوات؟ (بأسبقية واضحة)</h3>
+      <h3 class="font-display font-black text-lg mb-3 flex items-center gap-2">${IC.target} توصيات تكميلية (بأسبقية واضحة)</h3>
       <div class="grid gap-2">${recommendations}</div>
     </div>` + domains;
 
@@ -603,6 +689,16 @@ function renderCoverage() {
         el.querySelector(".card").style.boxShadow = "0 0 0 3px var(--primary)";
         setTimeout(() => el.querySelector(".card").style.boxShadow = "", 1800); }
     }, 120);
+  }));
+
+  // الانتقال إلى مجموعة سدّ الفجوات الخاصة بهدف (مقتصر على هذا القسم)
+  $$("[data-goto-gf]", $("#coverage-body")).forEach(b => b.addEventListener("click", () => {
+    const el = document.getElementById("gf-" + b.dataset.gotoGf);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+      el.style.boxShadow = "0 0 0 3px #7c3aed";
+      setTimeout(() => el.style.boxShadow = "", 1800);
+    }
   }));
 
   observeReveals();
