@@ -54,6 +54,7 @@
           <a href="#/plan"      class="nav-link" data-view="plan">خطة الدراسة</a>
           <a href="#/playlists" class="nav-link" data-view="playlists">القوائم الخمس</a>
           <a href="#/coverage"  class="nav-link" data-view="coverage">خريطة التغطية</a>
+          <a href="#/gaps"       class="nav-link" data-view="gaps">الفجوات بالعربي</a>
           <a href="#/schedule"  class="nav-link" data-view="schedule">الجدول الزمني</a>
           <a href="#/method"    class="nav-link" data-view="method">منهجية التحليل</a>
         </nav>
@@ -85,6 +86,7 @@
         <a href="#/plan"      class="nav-link text-center" data-view="plan">خطة الدراسة</a>
         <a href="#/playlists" class="nav-link text-center" data-view="playlists">القوائم الخمس</a>
         <a href="#/coverage"  class="nav-link text-center" data-view="coverage">خريطة التغطية</a>
+        <a href="#/gaps"       class="nav-link text-center" data-view="gaps">الفجوات بالعربي</a>
         <a href="#/schedule"  class="nav-link text-center" data-view="schedule">الجدول الزمني</a>
         <a href="#/method"    class="nav-link text-center" data-view="method">منهجية التحليل</a>
       </nav>
@@ -258,6 +260,18 @@
       <div id="coverage-body" class="grid gap-4"></div>
     </section>
 
+    <!-- ======================= الفجوات بالعربي (إضافة جديدة) ======================= -->
+    <section id="view-gaps" class="view hidden">
+      <div class="mb-6">
+        <h1 class="font-display font-black text-3xl mb-2">الفجوات بالعربي — محتوى عربي أصيل 100%</h1>
+        <p class="muted text-sm sm:text-base max-w-3xl leading-relaxed">سدّ كامل لأهداف SY0-601 العشرة غير المغطاة في القوائم الخمس — بخلاصة دراسية مكتوبة بالعربية لكل هدف، وفيديوهات من أقوى القنوات العربية الأصلية بعد بحث ومقارنة. بلا دبلجة ولا ترجمة آلية.</p>
+      </div>
+      <div id="gaps-hero" class="grid gap-4"></div>
+      <div id="gaps-method" class="mt-4"></div>
+      <div id="gaps-filters" class="flex flex-wrap gap-2 mt-6 mb-4"></div>
+      <div id="gaps-list" class="grid gap-4"></div>
+    </section>
+
     <!-- ======================= الجدول الزمني ======================= -->
     <section id="view-schedule" class="view hidden">
       <div class="mb-6">
@@ -313,6 +327,7 @@
           <a href="#/plan" class="footer-link" data-view="plan">خطة الدراسة المثلى</a>
           <a href="#/playlists" class="footer-link" data-view="playlists">تحليل القوائم الخمس</a>
           <a href="#/coverage" class="footer-link" data-view="coverage">خريطة تغطية أهداف الامتحان</a>
+          <a href="#/gaps" class="footer-link" data-view="gaps">الفجوات بالعربي — سدّ كامل بمحتوى أصيل</a>
           <a href="#/schedule" class="footer-link" data-view="schedule">الجدول الزمني المقترح</a>
           <a href="#/method" class="footer-link" data-view="method">منهجية التحليل</a>
         </div>
@@ -329,5 +344,7 @@
 
   <script src="assets/js/data.js"></script>
   <script src="assets/js/app.js"></script>
+  <script src="assets/js/gaps-data.js"></script>
+  <script src="assets/js/gaps.js"></script>
 </body>
 </html>
